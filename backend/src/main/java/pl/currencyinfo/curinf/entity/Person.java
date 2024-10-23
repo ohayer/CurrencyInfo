@@ -1,6 +1,7 @@
 package pl.currencyinfo.curinf.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
@@ -11,6 +12,7 @@ import java.math.BigDecimal;
 * */
 @Entity
 @NoArgsConstructor
+@Getter
 public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
