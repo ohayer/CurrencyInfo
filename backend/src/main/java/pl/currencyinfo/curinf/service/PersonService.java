@@ -80,10 +80,14 @@ public class PersonService {
      * @param responseCode kod odpowiedzi (sukces lub błąd)
      */
     private void savePersonSearchInfo(CurrencyBodyRequest request, int responseCode) {
-        PersonSearchInfo searchInfo = new PersonSearchInfo(
-                request.getName(),
-                responseCode
-        );
-        personSearchInfoRepository.save(searchInfo);
+        try {
+            PersonSearchInfo searchInfo = new PersonSearchInfo(
+                    request.getName(),
+                    responseCode
+            );
+            personSearchInfoRepository.save(searchInfo);
+        } catch (Exception e) {
+            System.err.println("Error while saving PersonSearchInfo: " + e.getMessage());
+        }
     }
 }
