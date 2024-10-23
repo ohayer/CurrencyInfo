@@ -2,6 +2,7 @@ package pl.currencyinfo.curinf.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.currencyinfo.curinf.exception.ErrorResponse;
 import pl.currencyinfo.curinf.model.CurrencyBodyRequest;
+import pl.currencyinfo.curinf.model.FortuneModel;
 import pl.currencyinfo.curinf.service.PersonService;
 
 import java.math.BigDecimal;
@@ -33,7 +35,19 @@ public class PersonController {
                     content = @Content)
     })
     @PostMapping("get-current-currency-value-command")
-    public ResponseEntity<BigDecimal> getCurrentCurrencyValueCommand(@RequestBody CurrencyBodyRequest body) {
-        return ResponseEntity.ok(personService.calculatePersonWealthInCurrency(body));
+    public ResponseEntity<FortuneModel> getCurrentCurrencyValueCommand(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Request body containing currency code and person's name",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = CurrencyBodyRequest.class),
+                            examples = @ExampleObject(
+                                    name = "Example Body",
+                                    value = "{\"currency\": \"USD\", \"name\": \"Jan Kowalski\"}"
+                            )
+                    )
+            ) @RequestBody CurrencyBodyRequest body) {
+        BigDecimal value = personService.calculatePersonWealthInCurrency(body);
+        FortuneModel response = new FortuneModel(value);
+        return ResponseEntity.ok(response);
     }
 }
