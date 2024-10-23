@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 /*
 * Klasa przechowująca przykłady osób i ich majątku
-* Majątek jest przechowywany w walucie Euro
+* Majątek jest przechowywany w walucie PLN
 * */
 @Entity
 @NoArgsConstructor
