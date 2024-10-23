@@ -12,9 +12,9 @@ import java.time.Instant;
  * Klasa przechowująca informacje o osobie, której dane zostały wyszukane wraz z datą i kodem odpowiedzi
  * */
 @NoArgsConstructor
-@Entity
 @Getter
 @Setter
+@Entity
 public class PersonSearchInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
