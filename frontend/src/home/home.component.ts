@@ -12,11 +12,10 @@ export class HomeComponent {
   constructor(private router: Router) { }
 
   searchByPerson() {
-    console.log('Wyszukaj osobę');
+    this.router.navigate(['/searchForm']);
   }
 
   showSearchList() {
-    console.log('Wyświetl listę wyszukań');
     this.router.navigate(['/tableView']);
   }
 }
