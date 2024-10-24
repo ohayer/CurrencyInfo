@@ -8,33 +8,33 @@
 
 <div *ngIf="!errorMessage && !isLoading">
   <mat-form-field appearance="fill">
-    <mat-label>Filtruj</mat-label>
+    <mat-label>Filtruj po nazwie</mat-label>
     <input matInput (keyup)="applyFilter($event)" placeholder="Filtruj dane" />
   </mat-form-field>
 
-  <table mat-table [dataSource]="dataSource" class="mat-table" matSort>
+  <table mat-table [dataSource]="dataSource" class="mat-table">
 
     <!-- ID Column -->
     <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+      <th mat-header-cell *matHeaderCellDef>ID</th>
       <td mat-cell *matCellDef="let element">{{ element.id }}</td>
     </ng-container>
 
     <!-- Name Column -->
     <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+      <th mat-header-cell *matHeaderCellDef>Nazwa</th>
       <td mat-cell *matCellDef="let element">{{ element.name }}</td>
     </ng-container>
 
     <!-- Date Column -->
     <ng-container matColumnDef="date">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+      <th mat-header-cell *matHeaderCellDef>Data</th>
       <td mat-cell *matCellDef="let element">{{ element.date | date:'yyyy-MM-dd HH:mm:ss' }}</td>
     </ng-container>
 
     <!-- Response Code Column -->
     <ng-container matColumnDef="responseCode">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Response Code</th>
+      <th mat-header-cell *matHeaderCellDef>Kod odpowiedzi</th>
       <td mat-cell *matCellDef="let element">{{ element.responseCode }}</td>
     </ng-container>
 
@@ -42,6 +42,5 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 
-  <mat-paginator [pageSize]="20" showFirstLastButtons></mat-paginator>
-  </div>
+  <mat-paginator [pageSize]="20" [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons></mat-paginator>
 </div>

@@ -1,17 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { AfterViewInit } from '@angular/core';
+import { RestUrl } from '../api/RestApi';
 
 // Angular Material Modules
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
-import { MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
@@ -28,38 +26,30 @@ export interface PersonSearchInfo {
   styleUrls: ['./person-search-table.component.css'],
   standalone: true,
   imports: [
-    HttpClientModule,
     CommonModule,
     MatPaginatorModule,
     MatTableModule,
-    MatSortModule,
     MatFormFieldModule,
     MatInputModule,
   ],
 })
-export class PersonSearchTableComponent implements OnInit, AfterViewInit {
+export class PersonSearchTableComponent implements OnInit {
   displayedColumns: string[] = ['id', 'name', 'date', 'responseCode'];
-  dataSource = new MatTableDataSource<PersonSearchInfo>();
+  dataSource!: MatTableDataSource<PersonSearchInfo>;
   errorMessage: string = '';
+  isLoading: boolean = true;
 
-  @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
   ngOnInit(): void {
-    this.dataSource.filterPredicate = (data: PersonSearchInfo, filter: string) => {
-      return data.name.toLowerCase().includes(filter);
-    };
     this.fetchData();
   }
-  isLoading: boolean = true;
+
   fetchData() {
     this.isLoading = true;
-    this.http.get<PersonSearchInfo[]>('http://localhost:8080/currencies/requests')
+    this.http.get<PersonSearchInfo[]>(RestUrl.getPersonSearchInfo)
       .pipe(
         catchError(error => {
           this.errorMessage = 'Nie można załadować danych z serwera';
@@ -69,9 +59,16 @@ export class PersonSearchTableComponent implements OnInit, AfterViewInit {
       .subscribe(data => {
         this.isLoading = false;
         if (data && data.length > 0) {
-          this.dataSource.data = data;
+          // Create a new MatTableDataSource with the data
+          this.dataSource = new MatTableDataSource<PersonSearchInfo>(data);
+
+          // Assign the paginator after the dataSource is created
           this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
+
+          // Set up filtering
+          this.dataSource.filterPredicate = (data: PersonSearchInfo, filter: string) => {
+            return data.name.toLowerCase().includes(filter);
+          };
         } else if (!this.errorMessage) {
           this.errorMessage = 'Brak danych do wyświetlenia';
         }
@@ -80,6 +77,8 @@ export class PersonSearchTableComponent implements OnInit, AfterViewInit {
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.dataSource.filter = filterValue;
+    if (this.dataSource) {
+      this.dataSource.filter = filterValue;
+    }
   }
 }
