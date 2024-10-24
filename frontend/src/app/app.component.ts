@@ -6,14 +6,7 @@ import { RouterOutlet } from '@angular/router';
   standalone: true,
   imports: [RouterOutlet],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  searchByPerson() {
-    console.log('Przejdź do wyszukiwarki');
-  }
-
-  showSearchList() {
-    console.log('Wyświetl listę wyszukań');
-  }
 }

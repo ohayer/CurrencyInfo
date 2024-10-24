@@ -1,0 +1,47 @@
+<div *ngIf="isLoading" class="loading-indicator">
+  Ładowanie danych...
+</div>
+
+<div *ngIf="errorMessage && !isLoading" class="error-message">
+  {{ errorMessage }}
+</div>
+
+<div *ngIf="!errorMessage && !isLoading">
+  <mat-form-field appearance="fill">
+    <mat-label>Filtruj</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Filtruj dane" />
+  </mat-form-field>
+
+  <table mat-table [dataSource]="dataSource" class="mat-table" matSort>
+
+    <!-- ID Column -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+      <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+      <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+    </ng-container>
+
+    <!-- Date Column -->
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+      <td mat-cell *matCellDef="let element">{{ element.date | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+    </ng-container>
+
+    <!-- Response Code Column -->
+    <ng-container matColumnDef="responseCode">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Response Code</th>
+      <td mat-cell *matCellDef="let element">{{ element.responseCode }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator [pageSize]="20" showFirstLastButtons></mat-paginator>
+  </div>
+</div>
