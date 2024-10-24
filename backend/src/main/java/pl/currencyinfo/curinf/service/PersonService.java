@@ -14,7 +14,6 @@ import pl.currencyinfo.curinf.repository.PersonSearchInfoRepository;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.Instant;
 
 @Service
 public class PersonService {
